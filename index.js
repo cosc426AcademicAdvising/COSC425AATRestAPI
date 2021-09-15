@@ -23,12 +23,13 @@ mongoUtil.connectToServer( function(err, client) {
 // middleware
 app.use(express.json());
 
-// Route middleware
+// route middleware
 app.use('/api/user', authRoute);
 app.use('/api/Department', deptRoute);
 app.use('/api/Student', studRoute);
 app.use('/api/FourYear', fourRoute);
 app.use('/api/Course', courseRoute);
 app.use('/api/MinPlan', minRoute);
+
 
 app.listen(5000, () => console.log('Server running'));
