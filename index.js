@@ -10,7 +10,7 @@ const studRoute = require('./routes/student');
 const fourRoute = require('./routes/fouryear');
 const courseRoute = require('./routes/Course');
 const authRoute = require('./routes/auth');
-const minRoute = require('./routes/Minplan');
+//const minRoute = require('./routes/Minplan');
 
 dotenv.config();
 
@@ -29,7 +29,7 @@ app.use('/api/Department', deptRoute);
 app.use('/api/Student', studRoute);
 app.use('/api/FourYear', fourRoute);
 app.use('/api/Course', courseRoute);
-app.use('/api/MinPlan', minRoute);
+//app.use('/api/MinPlan', minRoute);
 
 
 //app.listen(5000, () => console.log('Server running'));
