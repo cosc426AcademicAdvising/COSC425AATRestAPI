@@ -20,7 +20,7 @@ mongoUtil.connectToServer( function(err, client) {
     if(err) console.log(err);
 });
 
-// middleware
+// middlewares
 app.use(express.json());
 
 // route middleware
