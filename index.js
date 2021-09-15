@@ -29,7 +29,7 @@ app.use('/api/Department', deptRoute);
 app.use('/api/Student', studRoute);
 app.use('/api/FourYear', fourRoute);
 app.use('/api/Course', courseRoute);
-app.use('/api/MinPlan', minRoute);
+//app.use('/api/MinPlan', minRoute);
 
 
 app.listen(5000, () => console.log('Server running'));
