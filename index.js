@@ -31,4 +31,5 @@ app.use('/api/FourYear', fourRoute);
 app.use('/api/Course', courseRoute);
 app.use('/api/MinPlan', minRoute);
 
+// server
 app.listen(process.env.PORT || 5000)
