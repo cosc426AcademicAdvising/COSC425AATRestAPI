@@ -10,7 +10,7 @@ const studRoute = require('./routes/student');
 const fourRoute = require('./routes/fouryear');
 const courseRoute = require('./routes/Course');
 const authRoute = require('./routes/auth');
-const minRoute = require('./routes/Minplan');
+const minRoute = require('./routes/Minor');
 
 dotenv.config();
 
