@@ -33,4 +33,4 @@ app.use('/api/Course', courseRoute);
 
 
 //app.listen(5000, () => console.log('Server running'));
-app.listen(process.env.PORT || 3000, () => console.log('Server running'));
+app.listen(process.env.PORT || 5000)
