@@ -14,6 +14,7 @@ router.get("/Plan/:minor", verify.verToken, (req, res) => {
             return res.status(500).send(error);
         }
         res.send(result);
+        console.log("done");
     });
 });
 
