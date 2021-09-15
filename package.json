@@ -1,7 +1,7 @@
 {
   "name": "auth",
   "version": "1.0.0",
-  "description": "",
+  "description": "Rest Api for the COSC 426 Academic Advising Tool Application and Website",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js"
@@ -23,5 +23,17 @@
     "node-jwk": "^0.1.0",
     "paseto": "^2.1.1",
     "typescript": "^4.2.4"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quincden/COSC425AATRestAPI.git"
+  },
+  "engines": {
+    "node": "14.x"
+  },
+  "bugs": {
+    "url": "https://github.com/quincden/COSC425AATRestAPI/issues"
+  },
+  "homepage": "https://github.com/quincden/COSC425AATRestAPI#readme"
 }
