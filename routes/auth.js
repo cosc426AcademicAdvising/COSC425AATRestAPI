@@ -50,7 +50,10 @@ router.post('/login', async (req, res) => {
 
     // Create and assign token
     gen.genToken().then((result) => {
-        res.send(result);
+        //res.send(result);
+        var tmp = {'token': result};
+        console.log(tmp);
+        res.send(tmp);
     }).catch((err) => {
         res.send(err);
     })
