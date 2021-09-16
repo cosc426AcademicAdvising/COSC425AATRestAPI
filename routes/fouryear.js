@@ -16,6 +16,22 @@ router.get("/Policy/:major", verify.verToken, (req, res) => {
     });
 });
 
+
+//Check if Four Year Plan exists
+router.get("/FourYearIn/:check", (req, res) => {
+    collection = mongoUtil.getFourYear();
+    var name = req.params.check;
+    collection.find({'major': name}).project({'major': 1, _id:0}).toArray((error, result) => {
+        if(error) {
+            return res.status(500).send(error);
+        }
+        if(result == "")
+            res.json(0);
+        else
+            res.json(1);
+    });
+});
+
 // getFourYearbyMajor
 router.get("/MajorPlan/:major", verify.verToken, (req, res) => {
     collection = mongoUtil.getFourYear();
