@@ -31,7 +31,8 @@ const pubkey = crypto.createPublicKey({key: rsaKeys.publicKey,
 
 module.exports = {
     genToken: async () => {
-        const token = await sign(payload, privkey);
+        const token = [];
+        token = await sign(payload, privkey);
         return token;
     },
     verToken: async (req, res, next) => {
