@@ -4,17 +4,20 @@ const {registerValidation, loginValidation} = require('../validation');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 const gen = require('./token');
+const mongoUtil = require('../mongoUtil');
+const { collection } = require('../model/user');
 
 dotenv.config();
 
-router.post('/register', async(req, res) => {
 
+router.post('/register', async(req, res) => {
+    collect = mongoUtil.getApiAccess();
     // validate first
     const {error} = registerValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
     
     // check email exists
-    const emailExist = await User.findOne({email: req.body.email});
+    const emailExist = await collect.findOne({email: req.body.email});
     if(emailExist) return res.status(400).send('Email already Exists');
 
     // Hash passwords
@@ -27,21 +30,23 @@ router.post('/register', async(req, res) => {
         password: hashPassword
     });
     try{
-        const savedUser = await user.save();
+        const savedUser = await collect.insertOne(user)
+        //const savedUser = await user.save();
         res.send({user: user._id});
     }catch(err){
-        res.status(400).json(1);
+        res.status(400).send(err);
     }
 });
 
 //login
 router.post('/login', async (req, res) => {
+    collect = mongoUtil.getApiAccess();
     // validate first
     const {error} = loginValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
     
     // check email exists
-    const user = await User.findOne({email: req.body.email});
+    const user = await collect.findOne({email: req.body.email});
     if(!user) return res.status(400).send('Email is wrong');
 
     // check password correct

@@ -46,6 +46,11 @@ module.exports = {
     getMinPlan: function(){
         collection = db.collection("MinPlan");
         return collection;
+    },
+
+    getApiAccess: function(){
+        collection = db.collection("API_Access");
+        return collection;
     }
 
 };
