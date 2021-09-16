@@ -21,7 +21,7 @@ router.get("/Policy/:major", verify.verToken, (req, res) => {
 router.get("/FourYearIn/:check", (req, res) => {
     collection = mongoUtil.getFourYear();
     var name = req.params.check;
-    collection.findOne({'major': name}).project({'major': 1, _id:0}).toArray((error, result) => {
+    collection.find({'major': name}).project({'major': 1, _id:0}).toArray((error, result) => {
         if(error) {
             return res.status(500).send(error);
         }
@@ -36,7 +36,7 @@ router.get("/FourYearIn/:check", (req, res) => {
 router.get("/FourYearInRegex/:check", (req, res) => {
     collection = mongoUtil.getFourYear();
     var name = req.params.check;
-    collection.findOne({"major": {"$regex": name}}).project({'major': 1, _id:0}).toArray((error, result) => {
+    collection.find({"major": {"$regex": name}}).project({'major': 1, _id:0}).toArray((error, result) => {
         if(error) {
             return res.status(500).send(error);
         }
