@@ -40,6 +40,7 @@ router.post('/register', async(req, res) => {
 
 //login
 router.post('/login', async (req, res) => {
+    console.log(req.body);
     collect = mongoUtil.getApiAccess();
     // validate first
     const {error} = loginValidation(req.body);
@@ -56,9 +57,7 @@ router.post('/login', async (req, res) => {
     // Create and assign token
     gen.genToken().then((result) => {
         //res.send(result);
-        var tmp = {'token': result};
-        console.log(tmp);
-        res.send(tmp);
+        res.send(result);
     }).catch((err) => {
         res.send(err);
     })
