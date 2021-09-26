@@ -5,9 +5,20 @@ var collection;
 
 
 // getDistinctSchools
-router.get("/School", verify.verToken, (req, res) => {
+router.get("/MajorSchool", verify.verToken, (req, res) => {
     collection = mongoUtil.getDept();
-    collection.distinct("School", function(error, result){
+    collection.distinct("School", {'Plan Type': 'Major'}, function(error, result){
+        if(error) {
+            return res.status(500).send(error);
+        }
+        res.send(result);
+    });
+});
+
+// getDistinctSchools
+router.get("/MinorSchool", (req, res) => {
+    collection = mongoUtil.getDept();
+    collection.distinct("School", {'Plan Type': 'Minor'}, function(error, result){
         if(error) {
             return res.status(500).send(error);
         }
