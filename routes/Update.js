@@ -155,4 +155,22 @@ router.post("/BackCoursePull", verify.verToken, (req, res) => {
         
     });
 });
+
+router.post("/NewPass", verify.verToken, (req, res) =>{
+		var sid = parseInt(req.body.s_id);
+		var quer = req.body.query;
+		var hash = req.body.hsh;
+		var param = {};
+		param[quer] = hsh;
+		var newVal = { $set: param};
+		collection = mongoUtil.getStud();
+		collection.updateOne({"s_id": sid}, newval,
+		(error, result) => {
+			if(error){
+				return res.status(500).send(error);
+			}
+			res.send(result);
+		});
+});
+	
 module.exports = router;
