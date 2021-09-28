@@ -17,10 +17,10 @@ router.get("/Subject", verify.verToken, (req, res) => {
 });
 
 //Find course regex
-router.get("/Regex/:subject/:catalog", (req, res) => {
+router.post("/Regex", (req, res) => {
     collection = mongoUtil.getCourse();
-    var sub = req.params.subject;
-    var cat = req.params.catalog;
+    var sub = req.body.subject;
+    var cat = req.body.catalog;
     collection.find({
             "$and": [
                 { 'Subject': { '$regex': sub} },
