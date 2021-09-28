@@ -21,10 +21,14 @@ router.post("/Regex", (req, res) => {
     collection = mongoUtil.getCourse();
     var sub = req.body.subject;
     var cat = req.body.catalog;
+    var title = req.body.title;
+    var cred = req.body.credit;
     collection.find({
             "$and": [
                 { 'Subject': { '$regex': sub} },
                 { 'Catalog': { '$regex': cat} },
+                { 'Long Title': { '$regex': title} },
+                { 'Allowd Unt': { '$regex': cred} },
                 { 'Status': 'A' }
             ]})
             .project({'Subject': 1, 'Catalog': 1, 'Allowd Unt': 1, 'Long Title': 1, _id:0}).toArray((error, result) => {
