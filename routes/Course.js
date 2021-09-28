@@ -17,23 +17,24 @@ router.get("/Subject", verify.verToken, (req, res) => {
 });
 
 //Find course regex
-router.get("/Course/Regex/:subject/:catalog", (req, res) => {
+router.get("/Regex/:subject/:catalog", (req, res) => {
     collection = mongoUtil.getCourse();
     var sub = req.params.subject;
     var cat = req.params.catalog;
     collection.find({
-            "$or": [
-                { 'subject': { '$regex': sub} },
-                { 'catalog': { '$regex': cat} }
+            "$and": [
+                { 'Subject': { '$regex': sub} },
+                { 'Catalog': { '$regex': cat} },
+                { 'Status': 'A' }
             ]})
-            .project({'Long Title': 1, _id:0}).toArray((error, result) => {
+            .project({'Subject': 1, 'Catalog': 1, 'Allowd Unt': 1, 'Long Title': 1, _id:0}).toArray((error, result) => {
         if(error) {
             return res.status(500).send(error);
         }
         if(result == "")
             res.json(0);
         else
-            res.json(1);
+            res.send(result);
     });
 });
 
