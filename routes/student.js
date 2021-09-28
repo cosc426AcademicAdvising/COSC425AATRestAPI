@@ -18,7 +18,7 @@ router.get("/:id", verify.verToken, (req, res) => {
 });
 
 // getDistinctStudentIDs
-router.get("/all/id", (req, res) => {
+router.get("/all/id",  verify.verToken, (req, res) => {
     collection = mongoUtil.getStud();
     collection.distinct("s_id", {}, function(error, result){
         if(error) {
@@ -29,7 +29,7 @@ router.get("/all/id", (req, res) => {
 });
 
 // getAllStudents
-router.get("/all/students", (req, res) => {
+router.get("/all/students",  verify.verToken, (req, res) => {
     collection = mongoUtil.getStud();
     collection.aggregate([
             {

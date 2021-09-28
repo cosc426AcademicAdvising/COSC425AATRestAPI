@@ -16,7 +16,7 @@ router.get("/MajorSchool", verify.verToken, (req, res) => {
 });
 
 // getDistinctSchools
-router.get("/MinorSchool", (req, res) => {
+router.get("/MinorSchool",  verify.verToken, (req, res) => {
     collection = mongoUtil.getDept();
     collection.distinct("School", {'Plan Type': 'Minor'}, function(error, result){
         if(error) {
@@ -50,7 +50,7 @@ router.get("/Major/:school", verify.verToken, (req, res) => {
 });
 
 //Check if Major exists
-router.get("/MajorIn/:check", (req, res) => {
+router.get("/MajorIn/:check",  verify.verToken, (req, res) => {
     collection = mongoUtil.getDept();
     var name = req.params.check;
     collection.find({'Plan Type': 'Major', 'Acad Plan': name}).project({'Acad Plan': 1, _id:0}).toArray((error, result) => {
@@ -66,7 +66,7 @@ router.get("/MajorIn/:check", (req, res) => {
 
 
 //addMajor
-router.post("/Major/Add", async (req, res) => {
+router.post("/Major/Add",  verify.verToken, async (req, res) => {
     collection = mongoUtil.getDept();
     var maj = req.body;
     const post = {
@@ -82,7 +82,7 @@ router.post("/Major/Add", async (req, res) => {
 });
 
 //deleteMajor
-router.post("/Major/Delete/:major", async (req, res) => {
+router.post("/Major/Delete/:major", verify.verToken, async (req, res) => {
     collection = mongoUtil.getDept();
     var maj = req.params.major;
     try {
@@ -117,7 +117,7 @@ router.get("/Minor/:school", verify.verToken, (req, res) => {
 });
 
 //Check if Minor exists
-router.get("/MinorIn/:check", (req, res) => {
+router.get("/MinorIn/:check",  verify.verToken, (req, res) => {
     collection = mongoUtil.getDept();
     var name = req.params.check;
     collection.find({'Plan Type': 'Minor', 'Acad Plan': name}).project({'Acad Plan': 1, _id:0}).toArray((error, result) => {
@@ -132,7 +132,7 @@ router.get("/MinorIn/:check", (req, res) => {
 });
 
 //addMinor
-router.post("/Minor/Add", async (req, res) => {
+router.post("/Minor/Add",  verify.verToken, async (req, res) => {
     collection = mongoUtil.getDept();
     var min = req.body;
     const post = {
@@ -148,7 +148,7 @@ router.post("/Minor/Add", async (req, res) => {
 });
 
 //deleteMinor
-router.post("/Minor/Delete/:minor", async (req, res) => {
+router.post("/Minor/Delete/:minor",  verify.verToken, async (req, res) => {
     collection = mongoUtil.getDept();
     var min = req.params.minor;
     try {

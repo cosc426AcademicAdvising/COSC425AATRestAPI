@@ -18,7 +18,7 @@ router.get("/Policy/:major", verify.verToken, (req, res) => {
 
 
 //Check if Four Year Plan exists
-router.get("/FourYearIn/:check", (req, res) => {
+router.get("/FourYearIn/:check",  verify.verToken, (req, res) => {
     collection = mongoUtil.getFourYear();
     var name = req.params.check;
     collection.find({'major': name}).project({'major': 1, _id:0}).toArray((error, result) => {
@@ -33,7 +33,7 @@ router.get("/FourYearIn/:check", (req, res) => {
 });
 
 //Check if Four Year Plan (Regex Search) exists
-router.get("/FourYearInRegex/:check", (req, res) => {
+router.get("/FourYearInRegex/:check",  verify.verToken, (req, res) => {
     collection = mongoUtil.getFourYear();
     var name = req.params.check;
     collection.find({"major": {"$regex": name}}).project({'major': 1, _id:0}).toArray((error, result) => {
