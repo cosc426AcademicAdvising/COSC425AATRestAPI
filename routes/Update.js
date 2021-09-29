@@ -85,27 +85,37 @@ router.post("/CourseSet", verify.verToken, (req, res) => {
     var title = req.body.title;
     var gen = req.body.gen;
     var sid = parseInt(req.body.s_id);
-    var min = req.body.min;
     var p1 = {};
     var p2 = {};
     var p3 = {};
     var p4 = {};
     var p5 = {};
+    
     p1[q1] = sub;
     p2[q2] = cat;
     p3[q3] = title;
     p4[q4] = cred;
     p5[q5] = gen;
-    var newVal = { $set: p1, p2, p3, p4, p5};
-    collection = mongoUtil.getStud();
-    collection.updateOne({"s_id": sid}, newVal,
-    (error, result) => {
-        if(error) {
-            return res.status(500).send(error);
-        }
-        console.log(result);
-        res.send(result);
-    });
+    for(var i=0;i<5;i++){
+        var newVal = { };
+        if(i == 0)
+            newVal = { $set: p1};
+        if(i == 1)
+            newVal = { $set: p2};
+        if(i == 2)
+            newVal = { $set: p3};
+        if(i == 3)
+            newVal = { $set: p4};
+        if(i == 4)
+            newVal = { $set: p5};
+        collection = mongoUtil.getStud();
+        collection.updateOne({"s_id": sid}, newVal, (error, result) => {
+            if(error) {
+                return res.status(500).send(error);
+            }
+        });
+    }
+    res.json(1);
 });
 
 // Reset old courses to null values
@@ -137,7 +147,6 @@ router.post("/CoursePull", verify.verToken, (req, res) => {
             return res.status(500).send(error);
         }
         res.send(result);
-        
     });
 });
 
