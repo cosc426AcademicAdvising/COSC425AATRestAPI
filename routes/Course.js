@@ -23,6 +23,7 @@ router.post("/Regex", (req, res) => {
     var cat = req.body.catalog;
     var title = req.body.title;
     var cred = req.body.credit;
+    console.log(sub);
     collection.find({
             "$and": [
                 { 'Subject': { '$regex': sub} },
