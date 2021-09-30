@@ -17,7 +17,7 @@ router.get("/Subject", verify.verToken, (req, res) => {
 });
 
 //Find course regex
-router.post("/Regex", (req, res) => {
+router.post("/Regex", verify.verToken, (req, res) => {
     collection = mongoUtil.getCourse();
     var sub = req.body.subject;
     var cat = req.body.catalog;
