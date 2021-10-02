@@ -4,6 +4,31 @@ const verify = require('./token');
 var collection;
 
 
+//Find course regex
+router.post("/Regex", verify.verToken, (req, res) => {
+    collection = mongoUtil.getDept();
+    var plan = req.body.plan;
+    var type = req.body.type;
+    var prog = req.body.prog;
+    var schl = req.body.schl;
+    collection.find({
+            "$and": [
+                { 'Acad Plan': { '$regex': plan} },
+                { 'Plan Type': { '$regex': type} },
+                { 'Acad Prog': { '$regex': prog} },
+                { 'School': { '$regex': schl} }
+            ]})
+            .project({'Acad Plan': 1, 'Plan Type': 1, 'Acad Prog': 1, 'School': 1, _id:0}).toArray((error, result) => {
+        if(error) {
+            return res.status(500).send(error);
+        }
+        if(result == "")
+            res.json(0);
+        else
+            res.send(result);
+    });
+});
+
 // getDistinctSchools
 router.get("/MajorSchool", verify.verToken, (req, res) => {
     collection = mongoUtil.getDept();
