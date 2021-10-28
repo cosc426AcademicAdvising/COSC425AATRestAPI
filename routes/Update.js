@@ -3,6 +3,14 @@ const mongoUtil = require('../mongoUtil');
 const verify = require('./token');
 var collection;
 
+router.post("/SubmitForm", (req, res) => {
+    var tmp = req.body;
+    console.log(tmp);
+    console.log("hi")
+    res.send("a");
+})
+
+
 // set majors to updated values
 router.post("/MajorSet", verify.verToken, (req, res) => {
     var quer = req.body.query;
