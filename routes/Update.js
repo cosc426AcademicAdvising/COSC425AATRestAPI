@@ -43,6 +43,8 @@ router.post("/MajorPull", verify.verToken, (req, res) => {
         
     });
 });
+// test
+
 
 // set minors to updated values
 router.post("/MinorSet", verify.verToken, (req, res) => {
