@@ -10,6 +10,30 @@ router.post("/SubmitForm", (req, res) => {
     res.send("a");
 })
 
+router.post("/MajorPlan", (req, res) => {
+    var plan = req.body;
+    cnt = plan.length;
+    console.log(plan)
+    var maj = plan[0].major
+    console.log(maj);
+    console.log(plan[1][0].semester)
+    console.log(plan[1][1].course)
+    console.log(plan[1][1].course.subject)
+    
+    var j = 0
+    for(var i=1;i<cnt;i++){
+        var sem = plan[i][0].semester;
+        var sub = plan[i][1].course.subject;
+        var cat = plan[i][1].course.catalog;
+        var title = plan[i][1].course.title;
+        var cred = plan[i][1].course.credit;
+        var tmp = "semester_";
+        var field = "" + tmp + sem
+        console.log(field)
+
+    }
+    res.send("a");
+})
 
 // set majors to updated values
 router.post("/MajorSet", verify.verToken, (req, res) => {
@@ -43,7 +67,6 @@ router.post("/MajorPull", verify.verToken, (req, res) => {
         
     });
 });
-// test
 
 
 // set minors to updated values

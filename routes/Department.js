@@ -184,4 +184,15 @@ router.post("/Minor/Delete/:minor",  verify.verToken, async (req, res) => {
     }
 });
 
+// getMajorPlan
+router.get("/MajorPlans", verify.verToken, (req, res) => {
+    collection = mongoUtil.getFourYear();
+    collection.find().project({'major': 1, _id:0}).toArray((error, result) => {
+        if(error) {
+            return res.status(500).send(error);
+        }
+        res.send(result);
+    });
+});
+
 module.exports = router;
