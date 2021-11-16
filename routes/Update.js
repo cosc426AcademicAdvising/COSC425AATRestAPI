@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { version } = require("joi");
 const mongoUtil = require('../mongoUtil');
 const verify = require('./token');
 var collection;
@@ -13,26 +14,61 @@ router.post("/SubmitForm", (req, res) => {
 router.post("/MajorPlan", (req, res) => {
     var plan = req.body;
     cnt = plan.length;
-    console.log(plan)
     var maj = plan[0].major
-    console.log(maj);
-    console.log(plan[1][0].semester)
-    console.log(plan[1][1].course)
-    console.log(plan[1][1].course.subject)
+    // console.log(maj);
+    // console.log(plan[1][0].semester)
+    // console.log(plan[1][1].course)
+    // console.log(plan[1][1].course.subject)
     
-    var j = 0
+    collection = mongoUtil.getFourYear();
+    collection.deleteOne({'major': maj}, function(err, obj) {
+        if(err) throw err;
+        console.log('1 doc deleted');
+    });
+
+    var newDoc = {
+        'name': "",
+        'id': "",
+        'date': "",
+        'major': maj,
+        'policies': ""
+    }
+    collection.insertOne(newDoc);
+    
+    var obj = []
+    var l = 0
+    var prevSem = 1
     for(var i=1;i<cnt;i++){
         var sem = plan[i][0].semester;
+        if(sem != prevSem || i+1 == cnt){
+            l = 0
+            field = 'semester_' + prevSem;
+            var tmp = {}
+            tmp[field] = obj;
+            var ins = {$set: tmp}
+            collection.updateOne({"major": maj}, ins, (error, result) => {
+                if(error) {
+                    return res.status(500).send(error);
+                }
+            });
+            obj = []
+        }
+        
         var sub = plan[i][1].course.subject;
         var cat = plan[i][1].course.catalog;
         var title = plan[i][1].course.title;
         var cred = plan[i][1].course.credit;
-        var tmp = "semester_";
-        var field = "" + tmp + sem
-        console.log(field)
-
+        var crs = {
+            'subject': sub,
+            'catalog': cat,
+            'title': title,
+            'cred': cred
+        }
+        obj.push(crs)
+        l += 1;
+        prevSem = sem;
     }
-    res.send("a");
+    res.json(1);
 })
 
 // set majors to updated values
