@@ -100,59 +100,99 @@ router.post("/MajorPlan", (req, res) => {
     var plan = req.body;
     cnt = plan.length;
     var maj = plan[0].major
-    // console.log(maj);
+    console.log(plan);
     // console.log(plan[1][0].semester)
     // console.log(plan[1][1].course)
     // console.log(plan[1][1].course.subject)
     
     collection = mongoUtil.getFourYear();
-    collection.deleteOne({'major': maj}, function(err, obj) {
-        if(err) throw err;
-        console.log('1 doc deleted');
-    });
+    // collection.deleteOne({'major': maj}, function(err, obj) {
+    //     // if(err) throw err;
+    //     // console.log('1 doc deleted');
+    // });
 
-    var newDoc = {
-        'name': "",
-        'id': "",
-        'date': "",
-        'major': maj,
-        'policies': ""
-    }
-    collection.insertOne(newDoc);
+    // var newDoc = {
+    //     'name': "",
+    //     'id': "",
+    //     'date': "",
+    //     'major': maj,
+    //     'policies': ""
+    // }
+    // collection.insertOne(newDoc);
     
-    var obj = []
-    var l = 0
-    var prevSem = 1
-    for(var i=1;i<cnt;i++){
-        var sem = plan[i][0].semester;
-        if(sem != prevSem || i+1 == cnt){
-            l = 0
-            field = 'semester_' + prevSem;
-            var tmp = {}
-            tmp[field] = obj;
-            var ins = {$set: tmp}
-            collection.updateOne({"major": maj}, ins, (error, result) => {
-                if(error) {
-                    return res.status(500).send(error);
-                }
-            });
-            obj = []
-        }
+    var obj = [];
+    var fullobj = [];
+    var field = "";
+    var sem = 0;
+    var inc = 1;
+    var cnter = [0, 0, 0, 0, 0, 0, 0, 0];
+
+    // var prevSem = 1
+    // for(var i=0;i<8;i++){
+    //     var sem = i+1;
         
-        var sub = plan[i][1].course.subject;
-        var cat = plan[i][1].course.catalog;
-        var title = plan[i][1].course.title;
-        var cred = plan[i][1].course.credit;
-        var crs = {
-            'subject': sub,
-            'catalog': cat,
-            'title': title,
-            'cred': cred
-        }
-        obj.push(crs)
-        l += 1;
-        prevSem = sem;
+    // }
+    for(var i=1;i<cnt;i++){
+        var sem = parseInt(plan[i][0].semester)-1;
+        cnter[sem]++;
     }
+    console.log(cnter);
+    for(var j=0;j<8;j++){
+        for(var i=0;i<cnter[j];i++){
+            var sem = parseInt(plan[inc][0].semester); 
+        
+            var sub = plan[inc][1].course.subject;
+            var cat = plan[inc][1].course.catalog; 
+            var title = plan[inc][1].course.title;
+            var cred = plan[inc][1].course.credit;
+            var crs = { 
+                'subject': sub,
+                'catalog': cat,
+                'title': title,
+                'cred': cred
+            }
+            obj.push(crs)
+            // console.log(i+1);
+            // console.log(cnt);
+            // if( parseInt(plan[i+1][0].semester) != sem || i+1 === cnt){
+            //     // console.log(i);
+            //     // console.log(sem);
+            //     field = 'semester_' + sem;
+            //     var tmp = {}
+            //     tmp[field] = obj;
+            //     console.log(tmp);
+            //     var ins = {$set: tmp}
+            //     await collection.updateOne({"major": maj}, ins, (error, result) => {
+            //         // if(error) console.log(error);
+            //         // console.log(result);
+            //     });
+            // } 
+            inc++;
+        }
+        field = 'semester_' + sem;
+        var tmp = {}
+        tmp[field] = obj;
+        console.log(tmp);
+        var ins = {$set: tmp}
+        collection.updateOne({"major": maj}, ins, (error, result) => {
+            // if(error) console.log(error);
+            // console.log(result);
+        });
+        obj=[];
+    }
+    console.log(obj)
+    
+    // obj = []
+    // }
+    // var fin = {}
+    // fin['comp'] = fullobj;
+    // console.log(fullobj);
+    // var ins = {$set: fin}
+    //         collection.updateOne({"major": maj}, ins, (error, result) => {
+    //             if(error) console.log(error);
+    //             console.log(result);
+    //         });
+
     res.json(1);
 })
 
