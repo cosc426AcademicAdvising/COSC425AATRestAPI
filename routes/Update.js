@@ -5,10 +5,95 @@ const verify = require('./token');
 var collection;
 
 router.post("/SubmitForm", (req, res) => {
-    var tmp = req.body;
+    var tmp = JSON.parse(req.body.form);
     console.log(tmp);
-    console.log("hi")
-    res.send("a");
+    var id = parseInt(tmp['s_id'])
+    collection = mongoUtil.getStud();
+    collection.updateOne({
+        's_id': id
+    },
+    {
+        '$pull': {
+            'taking_course': {
+                'cred': {
+                    '$gte': 0
+                }
+            }
+        }
+    }, function(err, obj) {
+        if(err) throw err;
+        console.log("Updated");
+    })
+    collection.updateOne({
+        's_id': id
+    },
+    {
+        '$pull': {
+            'backup_course': {
+                'cred': {
+                    '$gte': 0
+                }
+            }
+        }
+    }, function(err, obj) {
+        if(err) throw err;
+        console.log("Updated");
+    })
+    collection.updateOne({
+        's_id': id
+    },
+    {
+        '$set': {
+            'memo': tmp.memo
+        }
+    })
+    var cntT = tmp.taking_course.length;
+    var obj = []
+    for(var i=0;i<cntT;i++){
+        var stringArray = tmp.taking_course[i][0].split(/(\s+)/);
+        var sub = stringArray[0];
+        var cat = stringArray[2];
+        var title = tmp.taking_course[i][1];
+        var cred = tmp.taking_course[i][2];
+        var crs = {
+            'subject': sub,
+            'catalog': cat,
+            'title': title,
+            'cred': cred
+        }
+        obj.push(crs);
+        if(i+1 == cntT){
+            var p1 = {}
+            p1['taking_course'] = obj;
+            var ins = {$set: p1}
+            collection.updateOne({'s_id': id}, ins);
+        }
+    }
+
+    var cntB = tmp.backup_course.length;
+    obj = [];
+    for(var i=0;i<cntB;i++){
+        
+        var stringArray = tmp.backup_course[i][0].split(/(\s+)/);
+        var sub = stringArray[0];
+        var cat = stringArray[2];
+        var title = tmp.backup_course[i][1];
+        var cred = tmp.backup_course[i][2];
+        var crs = {
+            'subject': sub,
+            'catalog': cat,
+            'title': title,
+            'cred': cred
+        }
+        obj.push(crs);
+        if(i+1 == cntB){
+            var p1 = {}
+            p1['backup_course'] = obj;
+            var ins = {$set: p1}
+            collection.updateOne({'s_id': id}, ins);
+        }
+    }
+    res.json(1);
 })
 
 router.post("/MajorPlan", (req, res) => {
