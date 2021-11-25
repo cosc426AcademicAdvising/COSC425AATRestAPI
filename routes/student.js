@@ -1,10 +1,25 @@
+/*
+
+Student Collection database functions
+Returns or posts any data to Student collection in database
+
+Some comments above function name correspond with the function name of
+ the python app that is requesting this 
+
+ Majority of functions that pull data from database have
+ a similar structure with the query methods changing
+
+*/
+
 const router = require("express").Router();
 const mongoUtil = require('../mongoUtil');
 const verify = require('./token');
 
 var collection;
 
+// AAT function name
 // getStudentbyID
+// Returns a student doc based of specified ID value
 router.get("/:id", verify.verToken, (req, res) => {
     collection = mongoUtil.getStud();
     var sid = parseInt(req.params.id);
@@ -17,7 +32,9 @@ router.get("/:id", verify.verToken, (req, res) => {
     });
 });
 
+// AAT function name
 // getDistinctStudentIDs
+// Returns a list of all distinct student IDs
 router.get("/all/id",  verify.verToken, (req, res) => {
     collection = mongoUtil.getStud();
     collection.distinct("s_id", {}, function(error, result){
@@ -28,9 +45,12 @@ router.get("/all/id",  verify.verToken, (req, res) => {
     });
 });
 
+// AAT function name
 // getAllStudents
+// Returns a list of all Student names and ID's
 router.get("/all/students",  verify.verToken, (req, res) => {
     collection = mongoUtil.getStud();
+    // MongoDB aggregation which groups unique s_id and name then projects those values
     collection.aggregate([
             {
                 "$group": {

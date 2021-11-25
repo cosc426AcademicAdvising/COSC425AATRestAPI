@@ -1,9 +1,24 @@
+/*
+
+Course Collection database functions
+Returns or posts any data to Course collection in database
+
+Some comments above function name correspond with the function name of
+ the python app that is requesting this 
+
+ Majority of functions that pull data from database have
+ a similar structure with the query methods changing
+
+*/
+
 const router = require("express").Router();
 const mongoUtil = require('../mongoUtil');
 const verify = require('./token');
 var collection;
 
+// AAT function name
 // getDistinctSubjects
+// Returns a list of all distinct subjects for all courses
 router.get("/Subject", verify.verToken, (req, res) => {
     {
         collection = mongoUtil.getCourse();
@@ -17,6 +32,7 @@ router.get("/Subject", verify.verToken, (req, res) => {
 });
 
 //Find course regex
+// Returns a list of all courses matching specified paramters
 router.post("/Regex", verify.verToken, (req, res) => {
     collection = mongoUtil.getCourse();
     var sub = req.body.subject;
@@ -42,7 +58,9 @@ router.post("/Regex", verify.verToken, (req, res) => {
     });
 });
 
+// AAT function name
 // getCoursebySubCat
+// Returns a course matching a specified subject and catalog
 router.get("/:subject/:catalog", verify.verToken, (req, res) => {
     collection = mongoUtil.getCourse();
     var sub = req.params.subject;

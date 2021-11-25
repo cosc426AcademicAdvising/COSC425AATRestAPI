@@ -1,3 +1,14 @@
+/*
+
+Root file for API
+Main package is Express
+Written in Node js
+
+Initializes all API directories, direcotory routes, 
+and Mondo DB database connection
+
+*/
+
 const express = require('express');
 const app = express();
 const dotenv = require('dotenv');

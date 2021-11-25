@@ -1,14 +1,28 @@
+/*
+
+Handles any updating of student information
+
+Submits program planning forms from website by updating studnet file
+
+Updates student file based of changes advisor makes through app
+
+*/
+
 const router = require("express").Router();
 const { version } = require("joi");
 const mongoUtil = require('../mongoUtil');
 const verify = require('./token');
 var collection;
 
+// Reuqested through submit form in schedule new of website
 router.post("/SubmitForm", (req, res) => {
+    // Parse the json string packed into request body
     var tmp = JSON.parse(req.body.form);
-    console.log(tmp);
-    var id = parseInt(tmp['s_id'])
+    // Get int ID value
+    var id = parseInt(tmp['s_id']);
+    // Set to Student collection
     collection = mongoUtil.getStud();
+    // Start by pulling all courses in 'taking_course' from student file
     collection.updateOne({
         's_id': id
     },
@@ -24,6 +38,7 @@ router.post("/SubmitForm", (req, res) => {
         if(err) throw err;
         console.log("Updated");
     })
+    // Then pull all courses in 'backup_course'
     collection.updateOne({
         's_id': id
     },
@@ -39,6 +54,7 @@ router.post("/SubmitForm", (req, res) => {
         if(err) throw err;
         console.log("Updated");
     })
+    // Set the new memo
     collection.updateOne({
         's_id': id
     },
@@ -47,29 +63,39 @@ router.post("/SubmitForm", (req, res) => {
             'memo': tmp.memo
         }
     })
+    // Get number of couses attempting to be added
     var cntT = tmp.taking_course.length;
     var obj = []
+    // For each course in 'taking_course'
     for(var i=0;i<cntT;i++){
+        // Split the subject and catalog
         var stringArray = tmp.taking_course[i][0].split(/(\s+)/);
+        // Assign body values to variables
         var sub = stringArray[0];
         var cat = stringArray[2];
         var title = tmp.taking_course[i][1];
         var cred = tmp.taking_course[i][2];
+        // Construct course object
         var crs = {
             'subject': sub,
             'catalog': cat,
             'title': title,
             'cred': cred
         }
+        // Add course to array
         obj.push(crs);
+        // If on the last course then update the doc
         if(i+1 == cntT){
+            // Assign the field name for the array of objects
             var p1 = {}
             p1['taking_course'] = obj;
             var ins = {$set: p1}
+            // Update database records
             collection.updateOne({'s_id': id}, ins);
         }
     }
 
+    // Repeat process above for 'backup_course'
     var cntB = tmp.backup_course.length;
     obj = [];
     for(var i=0;i<cntB;i++){
@@ -96,6 +122,7 @@ router.post("/SubmitForm", (req, res) => {
     res.json(1);
 })
 
+// Updates the courses in a Four Year plan for a specified major
 router.post("/MajorPlan", (req, res) => {
     var plan = req.body;
     cnt = plan.length;
@@ -120,47 +147,55 @@ router.post("/MajorPlan", (req, res) => {
     var field = "";
     var sem = 0;
     var inc = 1;
+    // Keeps track of the number of courses in each semester
     var cnter = [0, 0, 0, 0, 0, 0, 0, 0];
 
-    
+    // For the total number of courses
     for(var i=1;i<cnt;i++){
+        // Increment the corresponding array value based on which semester the course falls under
         var sem = parseInt(plan[i][0].semester)-1;
         cnter[sem]++;
     }
+    // For 8 semesters
     for(var j=0;j<8;j++){
+        // For the number of courses in that semester
         for(var i=0;i<cnter[j];i++){
-            var sem = parseInt(plan[inc][0].semester); 
-        
+            var sem = parseInt(plan[inc][0].semester);  
             var sub = plan[inc][1].course.subject;
             var cat = plan[inc][1].course.catalog; 
             var title = plan[inc][1].course.title;
             var cred = plan[inc][1].course.credit;
+            // Construct course object
             var crs = { 
                 'subject': sub,
                 'catalog': cat,
                 'title': title,
                 'cred': cred
             }
+            // Push object into array
             obj.push(crs)
             inc++;
         }
+        // Construct field name
         field = 'semester_' + sem;
         var tmp = {}
+        // Method to assign a field name based of value in variable
         tmp[field] = obj;
-        console.log(tmp);
         var ins = {$set: tmp}
+        // Update database records
         collection.updateOne({"major": maj}, ins, (error, result) => {
             if(error) console.log(error);
             
         });
+        // Clear array
         obj=[];
     }
-    console.log(obj)
     
     res.json(1);
 })
 
-// set majors to updated values
+
+// set majors to new values
 router.post("/MajorSet", verify.verToken, (req, res) => {
     var quer = req.body.query;
     var sid = parseInt(req.body.s_id);
@@ -179,6 +214,7 @@ router.post("/MajorSet", verify.verToken, (req, res) => {
 });
 
 // pull outdated majors
+// Whenever new major count is less than previous
 router.post("/MajorPull", verify.verToken, (req, res) => {
     var sid = parseInt(req.body.s_id);
     var newVal = { $pull: {'major': {'title': 'null'}}};
@@ -215,6 +251,7 @@ router.post("/MinorSet", verify.verToken, (req, res) => {
 });
 
 // pull outdated minors
+// Whenever new major count is less than previous
 router.post("/MinorPull", verify.verToken, (req, res) => {
     var sid = parseInt(req.body.s_id);
     var newVal = { $pull: {'minor': {'title': 'null'}}};
@@ -277,6 +314,7 @@ router.post("/CourseSet", verify.verToken, (req, res) => {
 });
 
 // Reset old courses to null values
+// Sets no longer needed courses to NULL indicating need for removal
 router.post("/CourseReset", verify.verToken, (req, res) => {
     var q1 = req.body.field1;
     var sid = parseInt(req.body.s_id);
@@ -295,6 +333,7 @@ router.post("/CourseReset", verify.verToken, (req, res) => {
 });
 
 // pull outdated courses
+// Whenever count of taking_courses is less than previous
 router.post("/CoursePull", verify.verToken, (req, res) => {
     var sid = parseInt(req.body.s_id);
     var newVal = { $pull: {'taking_course': {'subject': 'null'}}};
@@ -309,6 +348,7 @@ router.post("/CoursePull", verify.verToken, (req, res) => {
 });
 
 // pull outdated backup courses
+// Whenever count of backup_courses is less than previous
 router.post("/BackCoursePull", verify.verToken, (req, res) => {
     var sid = parseInt(req.body.s_id);
     var newVal = { $pull: {'backup_course': {'subject': 'null'}}};
