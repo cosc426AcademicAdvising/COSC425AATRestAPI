@@ -364,12 +364,18 @@ router.post("/BackCoursePull", verify.verToken, (req, res) => {
 });
 
 router.post("/NewPass", verify.verToken, (req, res) =>{
-		var sid = parseInt(req.body.s_id);
-		var quer = req.body.query;
-		var hash = req.body.hsh;
-		var newVal = { $set: hash};
+		const bodyParser = require('body-parser');
+		const express = require('express');
+		express().use(bodyParser());
+		var sid = req.body['s_id'];
+		var hash = req.body['passHash'];
+		const update = {
+			$set: {
+				passHash: hash
+			},
+		};
 		collection = mongoUtil.getStud();
-		collection.updateOne({"s_id": sid}, newval,
+		collection.updateOne({"s_id": sid}, update,
 		(error, result) => {
 			if(error){
 				return res.status(500).send(error);
