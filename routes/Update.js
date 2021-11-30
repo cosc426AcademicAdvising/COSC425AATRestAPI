@@ -123,7 +123,7 @@ router.post("/SubmitForm", (req, res) => {
 })
 
 // Updates the courses in a Four Year plan for a specified major
-router.post("/MajorPlan", (req, res) => {
+router.post("/MajorPlan", verify.verToken, (req, res) => {
     var plan = req.body;
     cnt = plan.length;
     var maj = plan[0].major
@@ -194,6 +194,111 @@ router.post("/MajorPlan", (req, res) => {
     res.json(1);
 })
 
+// Updates the courses in a Four Year plan for a specified major
+router.post("/MinorPlan", (req, res) => {
+    var plan = req.body;
+    console.log(plan);
+    var init_vars = plan[0];
+    console.log(init_vars);
+    var grp = init_vars.group;
+    var minor = init_vars.minor;
+    var req = init_vars.req;
+
+    var obj = [];
+    var cnt = plan.length;
+    for(var i=1;i<cnt;i++) {
+        var sub = plan[i].course.subject;
+        var cat = plan[i].course.catalog; 
+        var title = plan[i].course.title;
+        var cred = plan[i].course.credit;
+        // Construct course object
+        var crs = { 
+            'subject': sub,
+            'catalog': cat,
+            'title': title,
+            'cred': cred
+        };
+        // Push object into array
+        obj.push(crs);
+    }
+    // Construct field name
+    field = 'crs_' + grp;
+    var tmp = {};
+    // Method to assign a field name based of value in variable
+    tmp[field] = obj;
+    var ins = {$set: tmp};
+    // Update database records
+    collection.updateOne({"minor": minor}, ins, (error, result) => {
+        if(error) console.log(error);
+    });
+    // cnt = plan.length;
+    // var maj = plan[0].major
+    // console.log(plan);
+    // collection = mongoUtil.getFourYear();
+    // collection.deleteOne({'major': maj}, function(err, obj) {
+    //     if(err) throw err;
+    // });
+
+    // var newDoc = {
+    //     'name': "",
+    //     'id': "",
+    //     'date': "",
+    //     'major': maj,
+    //     'policies': ""
+    // }
+    // collection.insertOne(newDoc);
+    
+    // var obj = [];
+    // var fullobj = [];
+    // var field = "";
+    // var sem = 0;
+    // var inc = 1;
+    // // Keeps track of the number of courses in each semester
+    // var cnter = [0, 0, 0, 0, 0, 0, 0, 0];
+
+    // // For the total number of courses
+    // for(var i=1;i<cnt;i++){
+    //     // Increment the corresponding array value based on which semester the course falls under
+    //     var sem = parseInt(plan[i][0].semester)-1;
+    //     cnter[sem]++;
+    // }
+    // // For 8 semesters
+    // for(var j=0;j<8;j++){
+    //     // For the number of courses in that semester
+    //     for(var i=0;i<cnter[j];i++){
+    //         var sem = parseInt(plan[inc][0].semester);  
+    //         var sub = plan[inc][1].course.subject;
+    //         var cat = plan[inc][1].course.catalog; 
+    //         var title = plan[inc][1].course.title;
+    //         var cred = plan[inc][1].course.credit;
+    //         // Construct course object
+    //         var crs = { 
+    //             'subject': sub,
+    //             'catalog': cat,
+    //             'title': title,
+    //             'cred': cred
+    //         }
+    //         // Push object into array
+    //         obj.push(crs)
+    //         inc++;
+    //     }
+    //     // Construct field name
+    //     field = 'semester_' + sem;
+    //     var tmp = {}
+    //     // Method to assign a field name based of value in variable
+    //     tmp[field] = obj;
+    //     var ins = {$set: tmp}
+    //     // Update database records
+    //     collection.updateOne({"major": maj}, ins, (error, result) => {
+    //         if(error) console.log(error);
+            
+    //     });
+    //     // Clear array
+    //     obj=[];
+    // }
+    
+    res.json(1);
+})
 
 // set majors to new values
 router.post("/MajorSet", verify.verToken, (req, res) => {
