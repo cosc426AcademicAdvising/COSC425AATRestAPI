@@ -239,7 +239,7 @@ router.get("/MajorPlans", verify.verToken, (req, res) => {
 // AAT function name
 // getMinorPlan
 // Returns a four year plan for the specified minor
-router.get("/MajorPlans", verify.verToken, (req, res) => {
+router.get("/MinorPlans", verify.verToken, (req, res) => {
     collection = mongoUtil.getMinPlan();
     collection.find().project({'minor': 1, _id:0}).toArray((error, result) => {
         if(error) {
