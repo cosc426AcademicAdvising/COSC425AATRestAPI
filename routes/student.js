@@ -96,4 +96,19 @@ router.post("/new/:id", verify.verToken, (req, res) => {
     });
 });
 
+// AAT function name
+//delStud
+// Removes a minor from the database
+// router.post("/Minor/Delete/:student/:id",  verify.verToken, async (req, res) => {
+//     collection = mongoUtil.getStud();
+//     var stud = req.params.student;
+//     var id = parseInt(req.params.id);
+//     try {
+//         const result = await collection.deleteOne({'name': stud, 's_id': id});
+//         res.json(1);
+//     } catch (err) {
+//         res.json({ message: err});
+//     }
+// });
+
 module.exports = router;

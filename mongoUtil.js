@@ -66,6 +66,10 @@ module.exports = {
     getApiAccess: function(){
         collection = db.collection("API_Access");
         return collection;
-    }
+    },
 
+    getTest: function(){
+        collection = db.collection("test");
+        return collection;
+    }
 };

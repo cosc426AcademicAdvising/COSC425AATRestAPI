@@ -76,4 +76,32 @@ router.get("/:subject/:catalog", verify.verToken, (req, res) => {
     });
 });
 
+// AAT function name
+// insertCSV
+// Update database course list by inserting csv file from python app
+router.post("/insertCSV", verify.verToken, (req, res) => {
+    collection = mongoUtil.getTest();
+    collection.drop(function(err, delOK) {
+        if (err) throw err;
+        if (delOK) console.log("Collection deleted");
+        db.close();
+      })
+    var db = mongoUtil.getDb();
+    db.createCollection("test", function(err, res) {
+        if (err) throw err;
+        console.log("Collection created!");
+        db.close();
+    });
+    collection = mongoUtil.getTest();
+    var obj = req.body.finalOut;
+    console.log(obj);
+    // collection.insertMany(obj, function(error, result){
+    //     if(error) {
+    //         return res.status(500).send(error);
+    //     }
+    //     res.send(result);
+    // });
+    res.json(1);
+});
+
 module.exports = router;
