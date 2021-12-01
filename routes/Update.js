@@ -195,15 +195,17 @@ router.post("/MajorPlan", verify.verToken, (req, res) => {
 })
 
 // Updates the courses in a Four Year plan for a specified major
-router.post("/MinorPlan", (req, res) => {
+router.post("/MinorPlan", verify.verToken, (req, res) => {
     var plan = req.body;
-    console.log(plan);
-    var init_vars = plan[0];
-    console.log(init_vars);
-    var grp = init_vars.group;
-    var minor = init_vars.minor;
-    var req = init_vars.req;
-
+    console.log(plan[0]);
+    
+    var minor = plan[0][0].minor;
+    var grp = plan[0][0].group;
+    var req = plan[0][0].req;
+    
+    console.log(minor);
+    console.log(grp);
+    collection = mongoUtil.getMinPlan();
     var obj = [];
     var cnt = plan.length;
     for(var i=1;i<cnt;i++) {
@@ -221,23 +223,37 @@ router.post("/MinorPlan", (req, res) => {
         // Push object into array
         obj.push(crs);
     }
+    field = 'crs' + String(grp);
+    field2 = 'req' + String(grp);
+    tmp = {}
+    tmp[field] = {'subject': {'$exists': true}};
+    // Pull previous courses
+    collection.updateOne({
+        'minor': minor
+    },
+    {
+        '$pull': tmp
+    }, function(err, obj) {
+        if(err) throw err;
+        console.log("Updated");
+    })
     // Construct field name
-    field = 'crs_' + grp;
+    
     var tmp = {};
+    var tmp2 = {};
     // Method to assign a field name based of value in variable
     tmp[field] = obj;
+    tmp2[field2] = req;
     var ins = {$set: tmp};
     // Update database records
     collection.updateOne({"minor": minor}, ins, (error, result) => {
         if(error) console.log(error);
     });
-    // cnt = plan.length;
-    // var maj = plan[0].major
-    // console.log(plan);
-    // collection = mongoUtil.getFourYear();
-    // collection.deleteOne({'major': maj}, function(err, obj) {
-    //     if(err) throw err;
-    // });
+    var ins2 = {$set: tmp2};
+    // Update database records
+    collection.updateOne({"minor": minor}, ins2, (error, result) => {
+        if(error) console.log(error);
+    });
 
     // var newDoc = {
     //     'name': "",
