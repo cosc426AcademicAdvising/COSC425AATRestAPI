@@ -48,24 +48,26 @@ router.get("/all/id",  verify.verToken, (req, res) => {
 // AAT function name
 // getAllStudents
 // Returns a list of all Student names and ID's
-router.get("/all/students",  verify.verToken, (req, res) => {
+router.get("/all/students", verify.verToken, (req, res) => {
     collection = mongoUtil.getStud();
     // MongoDB aggregation which groups unique s_id and name then projects those values
-    collection.aggregate([
-            {
-                "$group": {
-                        "s_id": "$s_id",
-                        "name": "$name"
-                }
-            },
-            {
-                "$project": {
-                    "_id": 0,
-                    "s_id": "$s_id",
-                    "name": "$name"
-                }
-            }
-        ], function(error, result){
+    
+    collection.find().project({'name': 1,'s_id': 1, _id:0}).toArray((error, result) => {
+        if(error) {
+            return res.status(500).send(error);
+        }
+        res.send(result);
+    });
+});
+
+// AAT function name
+// getAllStudentsIds
+// Returns a list of all Student ID's
+router.get("/all/studentsIds", verify.verToken, (req, res) => {
+    collection = mongoUtil.getStud();
+    // MongoDB aggregation which groups unique s_id and name then projects those values
+    
+    collection.find().project({'s_id': 1, _id:0}).toArray((error, result) => {
         if(error) {
             return res.status(500).send(error);
         }
