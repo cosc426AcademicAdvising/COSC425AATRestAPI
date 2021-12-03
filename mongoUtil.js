@@ -68,6 +68,11 @@ module.exports = {
         return collection;
     },
 
+    getDraft: function(){
+        collection = db.collection("Draft");
+        return collection;
+    },
+    
     getTest: function(){
         collection = db.collection("test");
         return collection;

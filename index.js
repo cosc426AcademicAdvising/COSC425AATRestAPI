@@ -23,6 +23,7 @@ const courseRoute = require('./routes/Course');
 const authRoute = require('./routes/auth');
 const minRoute = require('./routes/Minor');
 const updateRoute = require('./routes/Update');
+const draftRoute = require("./routes/Draft");
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ app.use('/api/FourYear', fourRoute);
 app.use('/api/Course', courseRoute);
 app.use('/api/MinPlan', minRoute);
 app.use('/api/Update', updateRoute);
+app.use('/api/Draft', draftRoute);
 
 // server
 app.listen(process.env.PORT || 5000)
