@@ -29,19 +29,18 @@ router.post('/register', async(req, res) => {
     if(error) return res.status(400).send(error.details[0].message);
     
     // check email already exists
-    const emailExist = await collect.findOne({email: req.body.email});
-    if(emailExist) return res.status(400).send('Email already Exists');
+    const idExist = await collect.findOne({'s_id': req.body.id});
+    if(idExist) return res.status(400).send('ID already Exists');
 
     // Hash passwords
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(req.body.password, salt);
 
     // Create new user variable
-    const user = new User({
-        name: req.body.name,
-        email: req.body.email,
-        password: hashPassword
-    });
+    const user = {
+        's_id': req.body.id,
+        'password': hashPassword
+    };
     try{
         const savedUser = await collect.insertOne(user)
         //const savedUser = await user.save();
@@ -59,8 +58,8 @@ router.post('/login', async (req, res) => {
     if(error) return res.status(400).send(error.details[0].message);
     
     // check email exists
-    const user = await collect.findOne({email: req.body.email});
-    if(!user) return res.status(400).send('Email is wrong');
+    const user = await collect.findOne({'s_id': req.body.id});
+    if(!user) return res.status(400).send('ID is wrong');
 
     // check password correct
     const validPass = await bcrypt.compare(req.body.password, user.password);

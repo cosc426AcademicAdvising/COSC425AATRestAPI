@@ -96,6 +96,50 @@ router.post("/new/:id", verify.verToken, (req, res) => {
     });
 });
 
+
+//posts new student sign up info
+router.post("/firstTime",  (req, res) => {
+    // Parse the json string packed into request body
+    var tmp = JSON.parse(req.body.form);
+    // Get int ID value
+    var id = parseInt(tmp['s_id']);
+    // Set to Student collection
+    collection = mongoUtil.getStud();
+    // Get number of couses attempting to be added
+    var cntT = tmp.taking_course.length;
+    var obj = []
+    // For each course in 'taking_course'
+    for(var i=0;i<cntT;i++){
+        // Split the subject and catalog
+        var stringArray = tmp.taking_course[i][0].split(/(\s+)/);
+        // Assign body values to variables
+        var sub = stringArray[0];
+        var cat = stringArray[2];
+        var title = tmp.taking_course[i][1];
+        var cred = tmp.taking_course[i][2];
+        // Construct course object
+        var crs = {
+            'subject': sub,
+            'catalog': cat,
+            'title': title,
+            'cred': cred
+        }
+        // Add course to array
+        obj.push(crs);
+        // If on the last course then update the doc
+        if(i+1 == cntT){
+            // Assign the field name for the array of objects
+            var p1 = {}
+            p1['taking_course'] = obj;
+            var ins = {$set: p1}
+            console.log(ins);
+            // Update database records
+            // collection.updateOne({'s_id': id}, ins);
+        }
+    }
+    res.json(1);
+});
+
 // AAT function name
 //delStud
 // Removes a minor from the database
