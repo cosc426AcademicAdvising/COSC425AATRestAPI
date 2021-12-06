@@ -50,6 +50,34 @@ router.post('/register', async(req, res) => {
     }
 });
 
+router.post('/registerStudent', async(req, res) => {
+    collect = mongoUtil.getApiAccess();
+    // validate first
+    const {error} = registerValidation(req.body);
+    if(error) return res.status(400).send(error.details[0].message);
+    
+    // check email already exists
+    const idExist = await collect.findOne({'s_id': req.body.id});
+    if(idExist) return res.status(400).send('ID already Exists');
+
+    // // Hash passwords
+    // const salt = await bcrypt.genSalt(10);
+    // const hashPassword = await bcrypt.hash(req.body.password, salt);
+
+    // Create new user variable
+    const user = {
+        's_id': req.body.id,
+        'password': req.body.password
+    };
+    try{
+        const savedUser = await collect.insertOne(user)
+        //const savedUser = await user.save();
+        res.send({user: user._id});
+    }catch(err){
+        res.status(400).send(err);
+    }
+});
+
 // login
 router.post('/login', async (req, res) => {
     collect = mongoUtil.getApiAccess();
