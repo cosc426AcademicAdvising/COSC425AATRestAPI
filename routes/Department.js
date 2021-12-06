@@ -38,7 +38,7 @@ router.post("/Regex", verify.verToken, (req, res) => {
             return res.status(500).send(error);
         }
         // Use a return of 0 to indicate that no courses were found
-        if(result == "")
+        if(result == null)
             res.json(0);
         else
             res.send(result);
@@ -107,7 +107,7 @@ router.get("/MajorIn/:check",  verify.verToken, (req, res) => {
         if(error) {
             return res.status(500).send(error);
         }
-        if(result == "")
+        if(result == null)
             res.json(0);
         else
             res.json(1);
