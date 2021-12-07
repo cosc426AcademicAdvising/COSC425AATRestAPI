@@ -22,7 +22,7 @@ router.post("/Submit", (req, res) => {
         var cat = stringArray[2];
         var title = tmp.taking_course[i][1];
         var cred = tmp.taking_course[i][2];
-        var full = tmp.backup_course[i][3];
+        var full = tmp.taking_course[i][3];
         // Construct course object
         var crs = {
             'subject': sub,
