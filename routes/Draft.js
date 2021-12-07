@@ -22,12 +22,14 @@ router.post("/Submit", (req, res) => {
         var cat = stringArray[2];
         var title = tmp.taking_course[i][1];
         var cred = tmp.taking_course[i][2];
+        var full = tmp.backup_course[i][3];
         // Construct course object
         var crs = {
             'subject': sub,
             'catalog': cat,
             'title': title,
-            'cred': cred
+            'cred': cred,
+            'genED': full
         }
         // Add course to array
         obj.push(crs);
@@ -52,11 +54,13 @@ router.post("/Submit", (req, res) => {
         var cat = stringArray[2];
         var title = tmp.backup_course[i][1];
         var cred = tmp.backup_course[i][2];
+        var full = tmp.backup_course[i][3];
         var crs = {
             'subject': sub,
             'catalog': cat,
             'title': title,
-            'cred': cred
+            'cred': cred,
+            'genED': full
         }
         obj2.push(crs);
         if(i+1 == cntB){
