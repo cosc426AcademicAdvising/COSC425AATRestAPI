@@ -107,11 +107,13 @@ router.post("/SubmitForm", (req, res) => {
         var cat = stringArray[2];
         var title = tmp.backup_course[i][1];
         var cred = parseInt(tmp.backup_course[i][2]);
+        var gen = tmp.backup_course[i][3];
         var crs = {
             'subject': sub,
             'catalog': cat,
             'title': title,
-            'cred': cred
+            'cred': cred,
+            'genED': gen
         }
         obj.push(crs);
         if(i+1 == cntB){
