@@ -15,7 +15,7 @@ const verify = require('./token');
 var collection;
 
 // Reuqested through submit form in schedule new of website
-router.post("/SubmitForm", (req, res) => {
+router.post("/SubmitForm", async (req, res) => {
     // Parse the json string packed into request body
     var tmp = JSON.parse(req.body.form);
     // Get int ID value
@@ -24,7 +24,7 @@ router.post("/SubmitForm", (req, res) => {
     collection = mongoUtil.getStud();
     console.log(tmp);
     // Start by pulling all courses in 'taking_course' from student file
-    collection.updateOne({
+    await collection.updateOne({
         's_id': id
     },
     {
@@ -40,7 +40,7 @@ router.post("/SubmitForm", (req, res) => {
         console.log("Updated");
     })
     // Then pull all courses in 'backup_course'
-    collection.updateOne({
+    await collection.updateOne({
         's_id': id
     },
     {
@@ -56,7 +56,7 @@ router.post("/SubmitForm", (req, res) => {
         console.log("Updated");
     })
     // Set the new memo
-    collection.updateOne({
+    await collection.updateOne({
         's_id': id
     },
     {
@@ -94,11 +94,13 @@ router.post("/SubmitForm", (req, res) => {
             p1['taking_course'] = obj;
             var ins = {$set: p1}
             // Update database records
-            collection.updateOne({'s_id': id}, ins, function(err, obj) {
+            result = await collection.updateOne({'s_id': id}, ins, function(err, obj) {
                 if(err) throw err;
                 console.log("Updated");
             });
+            console.log(result);
         }
+
     }
 
     // Repeat process above for 'backup_course'
