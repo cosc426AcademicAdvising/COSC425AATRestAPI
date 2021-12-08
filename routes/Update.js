@@ -23,6 +23,7 @@ router.post("/SubmitForm", (req, res) => {
     // Set to Student collection
     collection = mongoUtil.getStud();
     // Start by pulling all courses in 'taking_course' from student file
+    tmp[field] = {'subject': {'$exists': true}};
     collection.updateOne({
         's_id': id
     },
@@ -30,7 +31,7 @@ router.post("/SubmitForm", (req, res) => {
         '$pull': {
             'taking_course': {
                 'cred': {
-                    '$gte': 0
+                    '$exists': true
                 }
             }
         }
@@ -46,7 +47,7 @@ router.post("/SubmitForm", (req, res) => {
         '$pull': {
             'backup_course': {
                 'cred': {
-                    '$gte': 0
+                    '$exists': true
                 }
             }
         }
