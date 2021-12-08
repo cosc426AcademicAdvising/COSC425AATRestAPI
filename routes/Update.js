@@ -75,12 +75,14 @@ router.post("/SubmitForm", (req, res) => {
         var cat = stringArray[2];
         var title = tmp.taking_course[i][1];
         var cred = tmp.taking_course[i][2];
+        var gen = tmp.taking_course[i][3];
         // Construct course object
         var crs = {
             'subject': sub,
             'catalog': cat,
             'title': title,
-            'cred': cred
+            'cred': cred,
+            'genED': gen
         }
         // Add course to array
         obj.push(crs);
