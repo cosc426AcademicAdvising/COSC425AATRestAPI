@@ -22,7 +22,6 @@ router.post("/SubmitForm", async (req, res) => {
     var id = parseInt(tmp['s_id']);
     // Set to Student collection
     collection = mongoUtil.getStud();
-    console.log(tmp);
     // Start by pulling all courses in 'taking_course' from student file
     await collection.updateOne({
         's_id': id
@@ -98,7 +97,6 @@ router.post("/SubmitForm", async (req, res) => {
                 if(err) throw err;
                 console.log("Updated");
             });
-            console.log(result);
         }
 
     }
