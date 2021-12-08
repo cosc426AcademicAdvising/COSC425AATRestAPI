@@ -22,6 +22,7 @@ router.post("/SubmitForm", (req, res) => {
     var id = parseInt(tmp['s_id']);
     // Set to Student collection
     collection = mongoUtil.getStud();
+    console.log(tmp);
     // Start by pulling all courses in 'taking_course' from student file
     collection.updateOne({
         's_id': id
@@ -93,7 +94,10 @@ router.post("/SubmitForm", (req, res) => {
             p1['taking_course'] = obj;
             var ins = {$set: p1}
             // Update database records
-            collection.updateOne({'s_id': id}, ins);
+            collection.updateOne({'s_id': id}, ins, function(err, obj) {
+                if(err) throw err;
+                console.log("Updated");
+            });
         }
     }
 
