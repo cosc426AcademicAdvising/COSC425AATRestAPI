@@ -74,7 +74,7 @@ router.post("/SubmitForm", (req, res) => {
         var sub = stringArray[0];
         var cat = stringArray[2];
         var title = tmp.taking_course[i][1];
-        var cred = tmp.taking_course[i][2];
+        var cred = parseInt(tmp.taking_course[i][2]);
         var gen = tmp.taking_course[i][3];
         // Construct course object
         var crs = {
@@ -106,7 +106,7 @@ router.post("/SubmitForm", (req, res) => {
         var sub = stringArray[0];
         var cat = stringArray[2];
         var title = tmp.backup_course[i][1];
-        var cred = tmp.backup_course[i][2];
+        var cred = parseInt(tmp.backup_course[i][2]);
         var crs = {
             'subject': sub,
             'catalog': cat,
