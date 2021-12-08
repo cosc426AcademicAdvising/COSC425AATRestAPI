@@ -29,7 +29,7 @@ router.post("/SubmitForm", (req, res) => {
     {
         '$pull': {
             'taking_course': {
-                'cred': {
+                'subject': {
                     '$exists': true
                 }
             }
@@ -45,7 +45,7 @@ router.post("/SubmitForm", (req, res) => {
     {
         '$pull': {
             'backup_course': {
-                'cred': {
+                'subject': {
                     '$exists': true
                 }
             }
