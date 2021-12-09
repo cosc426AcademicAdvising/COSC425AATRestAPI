@@ -125,7 +125,7 @@ router.post("/new/:id", (req, res) => {
 });
 
 //posts new student sign up info
-router.post("/firstTime",  (req, res) => {
+router.post("/firstTime", async (req, res) => {
     // Parse the json string packed into request body
     var tmp = JSON.parse(req.body.form);
     console.log(tmp);
@@ -200,7 +200,7 @@ router.post("/firstTime",  (req, res) => {
     p1 = {'course_taken': p2};
 
     var ins = {$set: p1}
-    result = collection.updateOne({'s_id': id}, ins);
+    result = await collection.updateOne({'s_id': id}, ins);
     console.log(result);
     res.send(result);
 });
