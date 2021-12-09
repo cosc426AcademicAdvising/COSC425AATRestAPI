@@ -76,35 +76,34 @@ router.get("/all/studentsIds", verify.verToken, (req, res) => {
 });
 
 //posts new student
-router.post("/new/:id", verify.verToken, (req, res) => {
+router.post("/new/:id", (req, res) => {
     collection = mongoUtil.getStud();
-    apicoll = mongoUtil.getApiAccess();
     var sid = parseInt(req.params.id);
-	var name = req.body.name;
-	var passHash = req.body.passHash;
-	var enrll = req.body.enrll;
-	var stud = {};
-	var stud_api = {};
-	stud[name] = name;
-	stud[passHash] = passHash;
-	stud[enrll] = enrll;
-	stud_api[passHash] = passHash
-	var newVal = { $set: stud};
-	var newVal2 = { $set: stud};
-    collection.insertOne({"s_id": sid}, newVal,
-    (error, result) => {
-        if(error) {
-            return res.status(500).send(error);
-        }
-        res.send(result);
-    });
-    apicol.insertOne({"s_id": sid}, newVal2,
-    (error, result) => {
-        if(error) {
-            return res.status(500).send(error);
-        }
-        res.send(result);
-    });
+    var name = req.body.name;
+    var hash = req.body.passHash;
+    var maj = [];
+    var min = [];
+    var ctaken = [];
+    var taking = [];
+    var backup = [];
+    var stud = {
+      'name': name,
+      's_id': sid,
+      'major': maj,
+      'minor': min,
+      'status': "",
+      'year': "",
+      'credits': 0,
+      'sem_id': "",
+      'registering_for': "",
+      'enrll': "",
+      'course_taken': ctaken,
+      'taking_course': taking,
+      'backup_course': backup,
+      'passHash': hash,
+      'semester': ""
+    }
+    collection.insertOne(stud);
 });
 
 
