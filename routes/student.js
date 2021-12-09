@@ -187,7 +187,7 @@ router.post("/firstTime", async (req, res) => {
                 break;
         }        
     }
-    p2 = {
+    p2 = [{
         'semester_1': s1,
         'semester_2': s2,
         'semester_3': s3,
@@ -196,7 +196,7 @@ router.post("/firstTime", async (req, res) => {
         'semester_6': s6,
         'semester_7': s7,
         'semester_8': s8
-    }
+    }]
     p1 = {'course_taken': p2};
 
     var ins = {$set: p1}
