@@ -77,7 +77,7 @@ router.get("/all/studentsIds", verify.verToken, (req, res) => {
 
 //posts new student
 router.post("/new/:id", (req, res) => {
-    collection = mongoUtil.getStud();
+    
     var sid = parseInt(req.params.id);
     var name = req.body.name;
     var hash = req.body.passHash;
@@ -95,6 +95,15 @@ router.post("/new/:id", (req, res) => {
     var ctaken = [];
     var taking = [];
     var backup = [];
+
+    collection = mongoUtil.getApiAccess();
+    var user = {
+        's_id': sid,
+        'password': hash
+    }
+    collection.insertOne(user);
+
+    collection = mongoUtil.getStud();
     var stud = {
       'name': name,
       's_id': sid,
@@ -109,7 +118,6 @@ router.post("/new/:id", (req, res) => {
       'course_taken': ctaken,
       'taking_course': taking,
       'backup_course': backup,
-      'passHash': hash,
       'semester': ""
     }
     result = collection.insertOne(stud);
@@ -126,7 +134,14 @@ router.post("/firstTime",  (req, res) => {
     collection = mongoUtil.getStud();
     // Get number of couses attempting to be added
     var cntT = tmp.taking_course.length;
-    var obj = []
+    var s1 = [];
+    var s2 = [];
+    var s3 = [];
+    var s4 = [];
+    var s5 = [];
+    var s6 = [];
+    var s7 = [];
+    var s8 = [];
     // For each course in 'taking_course'
     for(var i=0;i<cntT;i++){
         // Split the subject and catalog
@@ -136,6 +151,7 @@ router.post("/firstTime",  (req, res) => {
         var cat = stringArray[2];
         var title = tmp.taking_course[i][1];
         var cred = tmp.taking_course[i][2];
+        var sem = tmp.taking_course[i][3];
         // Construct course object
         var crs = {
             'subject': sub,
@@ -143,20 +159,48 @@ router.post("/firstTime",  (req, res) => {
             'title': title,
             'cred': cred
         }
-        // Add course to array
-        obj.push(crs);
-        // If on the last course then update the doc
-        if(i+1 == cntT){
-            // Assign the field name for the array of objects
-            var p1 = {}
-            p1['taking_course'] = obj;
-            var ins = {$set: p1}
-            console.log(ins);
-            // Update database records
-            // collection.updateOne({'s_id': id}, ins);
-        }
+        switch (sem){
+            case '1':
+                s1.push(crs);
+                break;
+            case '2':
+                s2.push(crs);
+                break;
+            case '3':
+                s3.push(crs);
+                break;
+            case '4':
+                s4.push(crs);
+                break;
+            case '5':
+                s5.push(crs);
+                break;
+            case '6':
+                s6.push(crs);
+                break;
+            case '7':
+                s7.push(crs);
+                break;
+            case '8':
+                s8.push(crs);
+                break;
+        }        
     }
-    res.json(1);
+    p2 = {
+        'semester_1': s1,
+        'semester_2': s2,
+        'semester_3': s3,
+        'semester_4': s4,
+        'semester_5': s5,
+        'semester_6': s6,
+        'semester_7': s7,
+        'semester_8': s8
+    }
+    p1 = {'course_taken': p2};
+
+    var ins = {$set: p1}
+    result = collection.updateOne({'s_id': id}, ins);
+    res.send(result);
 });
 
 // AAT function name
