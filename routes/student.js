@@ -83,14 +83,23 @@ router.post("/new/:id", (req, res) => {
     var hash = req.body.passHash;
     var maj = req.body.major;
     var min = req.body.minor;
+    var maj_cnt = maj.length;
+    var min_cnt = min.length;
+    var major = [];
+    var minor = [];
+    for(var i=0;i<maj_cnt;i++)
+        major.push({'title': maj[i]})
+    for(var i=0;i<min_cnt;i++)
+        minor.push({'title': min[i]})
+
     var ctaken = [];
     var taking = [];
     var backup = [];
     var stud = {
       'name': name,
       's_id': sid,
-      'major': maj,
-      'minor': min,
+      'major': major,
+      'minor': minor,
       'status': "",
       'year': "",
       'credits': 0,
