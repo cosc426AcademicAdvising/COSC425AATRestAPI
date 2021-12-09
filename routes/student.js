@@ -158,7 +158,8 @@ router.post("/firstTime", async (req, res) => {
             'subject': sub,
             'catalog': cat,
             'title': title,
-            'cred': cred
+            'credits': cred,
+            'grade': "P"
         }
         switch (sem){
             case '1':
