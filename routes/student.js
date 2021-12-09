@@ -78,16 +78,27 @@ router.get("/all/studentsIds", verify.verToken, (req, res) => {
 //posts new student
 router.post("/new/:id", verify.verToken, (req, res) => {
     collection = mongoUtil.getStud();
+    apicoll = mongoUtil.getApiAccess();
     var sid = parseInt(req.params.id);
 	var name = req.body.name;
 	var passHash = req.body.passHash;
 	var enrll = req.body.enrll;
 	var stud = {};
+	var stud_api = {};
 	stud[name] = name;
 	stud[passHash] = passHash;
 	stud[enrll] = enrll;
+	stud_api[passHash] = passHash
 	var newVal = { $set: stud};
+	var newVal2 = { $set: stud};
     collection.insertOne({"s_id": sid}, newVal,
+    (error, result) => {
+        if(error) {
+            return res.status(500).send(error);
+        }
+        res.send(result);
+    });
+    apicol.insertOne({"s_id": sid}, newVal2,
     (error, result) => {
         if(error) {
             return res.status(500).send(error);
