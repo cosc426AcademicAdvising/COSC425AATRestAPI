@@ -103,9 +103,9 @@ router.post("/new/:id", (req, res) => {
       'passHash': hash,
       'semester': ""
     }
-    collection.insertOne(stud);
+    result = collection.insertOne(stud);
+    res.send(result);
 });
-
 
 //posts new student sign up info
 router.post("/firstTime",  (req, res) => {
