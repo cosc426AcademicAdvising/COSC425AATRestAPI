@@ -128,6 +128,7 @@ router.post("/new/:id", (req, res) => {
 router.post("/firstTime",  (req, res) => {
     // Parse the json string packed into request body
     var tmp = JSON.parse(req.body.form);
+    console.log(tmp);
     // Get int ID value
     var id = parseInt(tmp['s_id']);
     // Set to Student collection
@@ -200,6 +201,7 @@ router.post("/firstTime",  (req, res) => {
 
     var ins = {$set: p1}
     result = collection.updateOne({'s_id': id}, ins);
+    console.log(result);
     res.send(result);
 });
 
