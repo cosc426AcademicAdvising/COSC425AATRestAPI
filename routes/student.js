@@ -132,7 +132,8 @@ router.post("/new/:id", (req, res) => {
       'course_taken': ctaken,
       'taking_course': taking,
       'backup_course': backup,
-      'semester': ""
+      'semester': "",
+      'memo': ""
     }
     result = collection.insertOne(stud);
     res.send(result);
