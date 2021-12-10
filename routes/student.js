@@ -75,6 +75,19 @@ router.get("/all/studentsIds", verify.verToken, (req, res) => {
     });
 });
 
+
+router.get("/hashpass/:id", verify.verToken, (req, res) => {
+    collection = mongoUtil.getApiAccess();
+    // MongoDB aggregation which groups unique s_id and name then projects those values
+    var s_id = parseInt(req.params.id);
+    collection.find({'s_id': s_id}).project({'password': 1, _id:0}).toArray((error, result) => {
+        if(error) {
+            return res.status(500).send(error);
+        }
+        res.send(result);
+    });
+});
+
 //posts new student
 router.post("/new/:id", (req, res) => {
     
