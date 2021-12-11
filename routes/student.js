@@ -159,6 +159,8 @@ router.post("/firstTime", async (req, res) => {
     var s6 = [];
     var s7 = [];
     var s8 = [];
+    var sW = [];
+    var sS = [];
     // For each course in 'taking_course'
     for(var i=0;i<cntT;i++){
         // Split the subject and catalog
@@ -202,6 +204,12 @@ router.post("/firstTime", async (req, res) => {
             case '8':
                 s8.push(crs);
                 break;
+            case 'Winter':
+                sW.push(crs);
+                break;
+            case 'Summer':
+                sS.push(crs);
+                break;
         }        
     }
     p2 = [{
@@ -212,7 +220,9 @@ router.post("/firstTime", async (req, res) => {
         'semester_5': s5,
         'semester_6': s6,
         'semester_7': s7,
-        'semester_8': s8
+        'semester_8': s8,
+        'semester_winter': sW,
+        'semester_summer': sS
     }]
     p1 = {'course_taken': p2};
 
