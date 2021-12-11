@@ -99,6 +99,7 @@ router.post("/new/:id", (req, res) => {
     var min = req.body.minor;
     var maj_cnt = maj.length;
     var min_cnt = min.length;
+    var enrll = req.body.enrll;
     var major = [];
     var minor = [];
     for(var i=0;i<maj_cnt;i++)
@@ -128,7 +129,7 @@ router.post("/new/:id", (req, res) => {
       'credits': 0,
       'sem_id': "",
       'registering_for': "",
-      'enrll': "",
+      'enrll': enrll,
       'course_taken': ctaken,
       'taking_course': taking,
       'backup_course': backup,
