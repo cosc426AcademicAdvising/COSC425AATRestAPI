@@ -147,6 +147,9 @@ router.post("/firstTime", async (req, res) => {
     console.log(tmp);
     // Get int ID value
     var id = parseInt(tmp['s_id']);
+    var semester = tmp['semester'];
+    var year = tmp['year'];
+    var credits = parseInt(tmp['credits']);
     // Set to Student collection
     collection = mongoUtil.getStud();
     // Get number of couses attempting to be added
@@ -224,7 +227,12 @@ router.post("/firstTime", async (req, res) => {
         'semester_winter': sW,
         'semester_summer': sS
     }]
-    p1 = {'course_taken': p2};
+    p1 = {
+        'course_taken': p2,
+        'credits': credits,
+        'year': year,
+        'semester': semester
+    };
 
     var ins = {$set: p1}
     result = await collection.updateOne({'s_id': id}, ins);
