@@ -75,7 +75,7 @@ router.get("/MinorSchool",  verify.verToken, (req, res) => {
 // AAT function name
 // getMajors
 // Returns a lsit of all majors
-router.get("/Major", verify.verToken, (req, res) => {
+router.get("/Major", (req, res) => {
     collection = mongoUtil.getDept();
     collection.find({'Plan Type': 'Major'}).project({'Acad Plan': 1, _id:0}).toArray((error, result) => {
         if(error) {
@@ -151,7 +151,7 @@ router.post("/Major/Delete/:major", verify.verToken, async (req, res) => {
 // AAT function name
 // getMinors
 // Returns a list of all minors
-router.get("/Minor", verify.verToken, (req, res) => {
+router.get("/Minor", (req, res) => {
     collection = mongoUtil.getDept();
     collection.find({'Plan Type': 'Minor'}).project({'Acad Plan': 1, _id:0}).toArray((error, result) => {
         if(error) {
