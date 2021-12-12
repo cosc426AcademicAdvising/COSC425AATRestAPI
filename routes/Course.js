@@ -33,7 +33,7 @@ router.get("/Subject", verify.verToken, (req, res) => {
 
 //Find course regex
 // Returns a list of all courses matching specified paramters
-router.post("/Regex", verify.verToken, (req, res) => {
+router.post("/Regex", (req, res) => {
     collection = mongoUtil.getCourse();
     var sub = req.body.subject;
     var cat = req.body.catalog;
