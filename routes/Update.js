@@ -304,64 +304,6 @@ router.post("/MinorPlan", verify.verToken, (req, res) => {
     collection.updateOne({"minor": minor}, ins2, (error, result) => {
         if(error) console.log(error);
     });
-
-    // var newDoc = {
-    //     'name': "",
-    //     'id': "",
-    //     'date': "",
-    //     'major': maj,
-    //     'policies': ""
-    // }
-    // collection.insertOne(newDoc);
-    
-    // var obj = [];
-    // var fullobj = [];
-    // var field = "";
-    // var sem = 0;
-    // var inc = 1;
-    // // Keeps track of the number of courses in each semester
-    // var cnter = [0, 0, 0, 0, 0, 0, 0, 0];
-
-    // // For the total number of courses
-    // for(var i=1;i<cnt;i++){
-    //     // Increment the corresponding array value based on which semester the course falls under
-    //     var sem = parseInt(plan[i][0].semester)-1;
-    //     cnter[sem]++;
-    // }
-    // // For 8 semesters
-    // for(var j=0;j<8;j++){
-    //     // For the number of courses in that semester
-    //     for(var i=0;i<cnter[j];i++){
-    //         var sem = parseInt(plan[inc][0].semester);  
-    //         var sub = plan[inc][1].course.subject;
-    //         var cat = plan[inc][1].course.catalog; 
-    //         var title = plan[inc][1].course.title;
-    //         var cred = plan[inc][1].course.credit;
-    //         // Construct course object
-    //         var crs = { 
-    //             'subject': sub,
-    //             'catalog': cat,
-    //             'title': title,
-    //             'cred': cred
-    //         }
-    //         // Push object into array
-    //         obj.push(crs)
-    //         inc++;
-    //     }
-    //     // Construct field name
-    //     field = 'semester_' + sem;
-    //     var tmp = {}
-    //     // Method to assign a field name based of value in variable
-    //     tmp[field] = obj;
-    //     var ins = {$set: tmp}
-    //     // Update database records
-    //     collection.updateOne({"major": maj}, ins, (error, result) => {
-    //         if(error) console.log(error);
-            
-    //     });
-    //     // Clear array
-    //     obj=[];
-    // }
     
     res.json(1);
 })
@@ -534,7 +476,7 @@ router.post("/BackCoursePull", verify.verToken, (req, res) => {
     });
 });
 
-router.post("/NewPass", verify.verToken, (req, res) =>{
+router.post("/NewPass", (req, res) =>{
 		const bodyParser = require('body-parser');
 		const express = require('express');
 		express().use(bodyParser());
