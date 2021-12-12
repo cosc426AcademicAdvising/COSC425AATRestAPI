@@ -25,7 +25,7 @@ router.get("/Plan/:minor", verify.verToken, (req, res) => {
     collection.findOne({"minor": min},
     (error, result) => {
         if(error) {
-            return res.json(1)
+            return res.status(500).send(error);
         }
         res.send(result);
     });
