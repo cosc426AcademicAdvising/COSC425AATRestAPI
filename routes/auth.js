@@ -82,6 +82,7 @@ router.post('/registerStudent', async(req, res) => {
 router.post('/login', async (req, res) => {
     collect = mongoUtil.getApiAccess();
     // validate first
+    console.log(req.body);
     const {error} = loginValidation(req.body);
     if(error) return res.status(400).send(error.details[0].message);
     
