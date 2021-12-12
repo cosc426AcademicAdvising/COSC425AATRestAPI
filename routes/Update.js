@@ -308,6 +308,22 @@ router.post("/MinorPlan", verify.verToken, (req, res) => {
     res.json(1);
 })
 
+
+// set majors to new values
+router.post("/Enrll", verify.verToken, (req, res) => {
+    var date = req.body.enrll;
+    var sid = parseInt(req.body.s_id);
+    var newVal = { $set: {'enrll': date}};
+    collection = mongoUtil.getStud();
+    collection.updateOne({"s_id": sid}, newVal,
+    (error, result) => {
+        if(error) {
+            return res.status(500).send(error);
+        }
+        res.send(result);
+    });
+});
+
 // set majors to new values
 router.post("/MajorSet", verify.verToken, (req, res) => {
     var quer = req.body.query;
