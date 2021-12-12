@@ -152,8 +152,8 @@ router.post("/Major/Delete/:major", verify.verToken, async (req, res) => {
 // getMinors
 // Returns a list of all minors
 router.get("/Minor", (req, res) => {
-    collection = mongoUtil.getDept();
-    collection.find({'Plan Type': 'Minor'}).project({'Acad Plan': 1, _id:0}).toArray((error, result) => {
+    collection = mongoUtil.getMinPlan();
+    collection.find().project({'minor': 1, _id:0}).toArray((error, result) => {
         if(error) {
             return res.status(500).send(error);
         }
